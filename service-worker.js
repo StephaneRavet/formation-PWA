@@ -1,8 +1,8 @@
-const CACHE_NAME = 'my-site-cache-v1'
+const CACHE_NAME = 'my-site-cache-v2'
 const urlsToCache = [
   '/',
-  '/assets/css/style.css',
-  '/assets/js/main.js',
+  // '/assets/css/style.css',
+  // '/assets/js/main.js',
 ]
 
 self.addEventListener('install', function (event) {
@@ -16,6 +16,24 @@ self.addEventListener('install', function (event) {
       .catch(error => console.error(error)),
   )
 })
+
+self.addEventListener('activate', function(event) {
+
+  const cacheWhitelist = [CACHE_NAME];
+
+  event.waitUntil(
+    // Check de toutes les clés de cache.
+    caches.keys().then(function(cacheNames) {
+      return Promise.all(
+        cacheNames.map(function(cacheName) {
+          if (cacheWhitelist.indexOf(cacheName) === -1) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
+});
 
 self.addEventListener('fetch', function (event) {
   event.respondWith(
@@ -51,3 +69,41 @@ self.addEventListener('fetch', function (event) {
       }),
   )
 })
+
+// ---------------
+
+var db;
+var request = indexedDB.open("pwaDatabase");
+request.onerror = function(event) {
+  alert("Pourquoi ne permettez-vous pas à ma web app d'utiliser IndexedDB?!");
+};
+request.onsuccess = function(event) {
+  db = event.target.result;
+};
+
+const customerData = [
+  { ssn: "444-44-4444", name: "Bill", age: 35, email: "bill@company.com" },
+  { ssn: "555-55-5555", name: "Donna", age: 32, email: "donna@home.org" }
+];
+
+request.onupgradeneeded = function(event) {
+  var db = event.target.result;
+
+  var objectStore = db.createObjectStore("customers", { keyPath: "ssn" });
+
+  objectStore.createIndex('name', 'name', { unique: false });
+  objectStore.createIndex('email', 'email', { unique: true });
+
+  objectStore.transaction.oncomplete = function () {
+    var customerObjectStore = db.transaction(['customers'], 'readwrite').objectStore('customers');
+    for (var i in customerData) {
+      customerObjectStore.add(customerData[i]);
+    }
+
+    for (var i in customerData) {
+      db.transaction(['customers'], 'readwrite').objectStore('customers').add(customerData[i]);
+    }
+  }
+};
+
+
