@@ -1,5 +1,8 @@
 {
   "short_name": "formation PWA",
+  "start_url": "/",
+  "name": "formation PWA",
+  "description": "formation PWA",
   "lang": "fr",
   "background_color": "#00aae7",
   "theme_color": "#00aae7",
@@ -73,5 +76,5 @@
       "sizes": "16x16"
     }
   ],
-  "prefer_related_applications": "false"
+  "prefer_related_applications": false
 }
