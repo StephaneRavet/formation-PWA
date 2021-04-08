@@ -1,0 +1,23 @@
+{
+  "name": "formation-pwa",
+  "version": "1.0.0",
+  "description": "Code support de cours pour la formation PWA, animée par Stéphane Ravet",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/StephaneRavet/formation-PWA.git"
+  },
+  "author": "Stéphane Ravet",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/StephaneRavet/formation-PWA/issues"
+  },
+  "homepage": "https://github.com/StephaneRavet/formation-PWA#readme",
+  "dependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
